@@ -18,6 +18,7 @@
 		<spark.version>2.4.0</spark.version>
 		<joda-time.version>2.9.9</joda-time.version>
 		<slf4j-log4j12.version>1.7.9</slf4j-log4j12.version>
+		<hbase.version>1.2.0</hbase.version>
 	</properties>
 
 	<dependencies>
@@ -39,7 +40,15 @@
 			<artifactId>joda-time</artifactId>
 			<version>${joda-time.version}</version>
 		</dependency>
+		<!-- hbase jar |start -->
+		<!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-client</artifactId>
+			<version>${hbase.version}</version>
+		</dependency>
 
+		<!-- hbase jar /end -->
 	</dependencies>
 
 	<build>
