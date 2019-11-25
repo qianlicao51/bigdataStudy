@@ -14,13 +14,12 @@
 	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<!-- 当发生滚动时，决定RollingFileAppender的行为，涉及文件移动和重命名。属性class定义具体的滚动策略类 -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>bigdataStudyLOG.%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
+			<fileNamePattern>bigdataStudyLOG.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>10KB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 			<!-- 可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件。假设设置每个月滚动，如果是6，则只保存最近6个月的文件，删除之前的旧文件 -->
-			<maxHistory>6</maxHistory>
+			<maxHistory>10</maxHistory>
 		</rollingPolicy>
 		<!-- 对记录事件进行格式化 -->
 		<encoder>
