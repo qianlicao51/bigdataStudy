@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.bigdata</groupId>
 	<artifactId>bigdataHbase</artifactId>
@@ -30,13 +31,19 @@
 
 		<!-- 日志 -->
 		<!-- logback -->
-		<!-- <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-access</artifactId> <version>${logback.version}</version> </dependency> <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-classic</artifactId> <version>${logback.version}</version> </dependency> <dependency> <groupId>ch.qos.logback</groupId> 
-			<artifactId>logback-core</artifactId> <version>${logback.version}</version> </dependency> -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-logging</artifactId>
-			<version>2.2.1.RELEASE</version>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-logging -->
+		<dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-logging</artifactId> <version>2.1.5.RELEASE</version> </dependency>
+
+		<!-- <dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-access</artifactId>
+			<version>${logback.version}</version>
+		</dependency> -->
 		<!-- 时间 -->
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -80,85 +87,96 @@
 	</dependencies>
 
 	<build>
-		<!-- 打包命令 -->
-		<!-- mvn clean dependency:copy-dependencies -DoutputDirectory=target/lib package -->
-		<!-- <finalName>${artifactId}-${version}</finalName> 这是默认名 ，修改打包名称可以修改这个 -->
-		<!--<sourceDirectory>src/main/java</sourceDirectory> -->
 		<resources>
-
-			<!-- 解决打包时候Mapper.xml没进入 dao.class目录 (报错提示org.apache.ibatis.binding.BindingException: Invalid bound statement) -->
 			<resource>
 				<directory>src/main/java</directory>
 				<includes>
+					<!-- java 下面的 xml等文件 打入 jar -->
 					<include>**/*.xml</include>
 				</includes>
 			</resource>
 
-			<!-- 控制资源文件的拷贝 -->
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>**/**</include>
+					<include>**/*.properties</include>
+					<include>**/*.**</include>
 				</includes>
-				<!--<filtering>false</filtering> -->
-				<!-- && 在IDE中运行要把这个给注释掉，因为IDEA打包 默认路劲是 classes ,有下面行会把配置文件转移到其他目录 -->
-				<targetPath>${project.build.directory}/config</targetPath>
+			</resource>
+			<resource>
+				<!-- 不可分离的jar打入 包中|springboot | -->
+				<directory>${project.basedir}/libs</directory>
+				<targetPath>BOOT-INF/lib/</targetPath>
+				<includes>
+					<include>**/*.jar</include>
+				</includes>
 			</resource>
 		</resources>
 		<plugins>
-			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-			<!-- Step 1 设置编译版本 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
-				<!-- 编译时使用的JDK版本和UTF8编码 -->
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-					<showWarnings>true</showWarnings>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<!-- Step 1 end 设置编译版本/end -->
-
-			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-			<!-- Step 2 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 1 |打包jar配置~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<!--打包jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.0.2</version>
 				<configuration>
-					<!--不打包资源文件 -->
+					<!--不打包资源文件 到jar 中 -->
+					<!-- 过滤掉不希望包含在jar中的文件 -->
 					<excludes>
-						<exclude>*.**</exclude>
+						<exclude>*.*</exclude><!-- resource目录下(不包含子文件夹下的内容) 不会被拷贝到jar -->
+						<!-- <exclude>*.properties</exclude> -->
+						<exclude>hbas*/**</exclude><!-- resource 目录中的 hbase 文件夹等不会拷贝到jar -->
+						<exclude>config/**</exclude>
 					</excludes>
-					<archive>
-						<!-- 清单文件 -->
+					<archive><!-- 清单文件 -->
 						<manifest>
-							<mainClass>com.bigdata.App</mainClass>
 							<addClasspath>true</addClasspath>
-							<useUniqueVersions>false</useUniqueVersions>
 							<classpathPrefix>lib/</classpathPrefix>
+							<!-- 指定入口 -->
+							<mainClass>com.bigdata.App2</mainClass>
+							<!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
+							<useUniqueVersions>true</useUniqueVersions>
 						</manifest>
-
-						<!-- 给清单文件添加键值对(配置文件外置) -->
-						<manifestEntries>
+						<manifestEntries><!-- 给清单文件添加键值对(配置文件外置) -->
 							<Class-Path>config/</Class-Path>
 						</manifestEntries>
-
 					</archive>
 				</configuration>
 			</plugin>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 2 |拷贝依赖 copy-dependencies~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+			<!-- TODO 打包命令 -->
+			<!-- mvn clean scala:compile compile package -->
+			<!-- mvn clean scala:compile dependency:copy-dependencies -DoutputDirectory=target/lib compile package -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<includeScope>compile</includeScope><!-- 拷贝是排除test 的依赖 这部分可以参考https://liugang594.iteye.com/blog/2093082 -->
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 3|拷贝资源文件 copy-resources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 
-			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-			<!-- 解决资源文件的编码问题 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.1.0</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -170,60 +188,39 @@
 							<resources>
 								<resource>
 									<directory>src/main/resources</directory>
+									<!-- 资源文件中存在变量引用 ,用 下面属性替换变量 -->
+									<filtering>true</filtering>
 								</resource>
 							</resources>
-							<outputDirectory>${project.build.directory}/config/</outputDirectory>
+							<outputDirectory>${project.build.directory}/config</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
-
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-
 			</plugin>
-			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-			<!-- 拷贝依赖的jar到lib目录(如果不配置可以使用 如下命令 把 依赖的jar 拷贝出来) (虽然配置了，但是不知道为什么不生效) -->
-			<!-- mvn dependency:copy-dependencies -DoutputDirectory=target/lib -->
+
+			<!-- scala 打包配置 |难道有 scala-jar可以不需要这个？ -->
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>copy</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/lib</outputDirectory>
-							<overWriteReleases>true</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-							<includeScope>compile</includeScope><!-- 拷贝是排除test 的依赖 这部分可以参考https://liugang594.iteye.com/blog/2093082 -->
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+				<version>3.2.2</version>
+			</plugin>
+
+			<!-- SpringBoot可以使用下面这个 -->
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<layout>ZIP</layout>
+					<includes>
+						<include>
+							<groupId>cn.jstars</groupId>
+							<artifactId>datatocloud</artifactId>
+						</include>
+					</includes>
+				</configuration>
 			</plugin>
 		</plugins>
-
 	</build>
-
-	<repositories>
-		<repository>
-			<id>nexus-aliyun</id>
-			<name>Nexus aliyun</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
 
 </project>

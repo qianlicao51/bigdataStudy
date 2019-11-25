@@ -1,7 +1,6 @@
 package com.bigdata;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -13,13 +12,16 @@ import lombok.extern.slf4j.Slf4j;
 public class App2 {
 	static Logger logger = LoggerFactory.getLogger(App2.class);
 
-	public static void main(String[] args) throws URISyntaxException {
+	public static void main(String[] args) throws Exception {
 		while (true) {
 
-			log.info("主程序执行 |{}", new DateTime().toString("yyyy-MM-dd HH:mm:ss:SSS"));
-			logger.info("主程序执行logger |{}", new DateTime().toString("yyyy-MM-dd HH:mm:ss:SSS"));
-			URI uri = ClassLoader.getSystemResource("application.properties").toURI();
-			System.out.println(uri.toString());
+			Thread.sleep(1000L);
+			//TODO 格式化中间插入字母
+			log.info("主程序执行 |{}", new DateTime().toString("yyyy-MM-dd'ABC'HH:mm:ss:SSS"));
+			// TODO ClassLoader.getSystemResource 开始的位置是不带"/"
+			URI uri = ClassLoader.getSystemResource("hbase/hbase-site.xml").toURI();
+			logger.error(uri.toString());
+
 		}
 	}
 }
