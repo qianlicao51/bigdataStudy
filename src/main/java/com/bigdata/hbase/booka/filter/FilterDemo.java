@@ -7,7 +7,14 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
 import org.apache.hadoop.hbase.filter.CompareFilter;
+import org.apache.hadoop.hbase.filter.FamilyFilter;
+import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.filter.FilterList.Operator;
+import org.apache.hadoop.hbase.filter.QualifierFilter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.filter.ValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -55,16 +62,82 @@ public class FilterDemo {
 	 * 
 	 * @throws IOException
 	 */
+	@Test
+	public void valueFilter() throws IOException {
+		ValueFilter valueFilter = new ValueFilter(CompareFilter.CompareOp.EQUAL, new SubstringComparator("tomAndJack"));
+		Scan scan = new Scan();
+		scan.setFilter(valueFilter);
+		ResultScanner re = table.getScanner(scan);
+		for (Result rs : re) {
+			String scanFilterName = Bytes.toString(rs.getValue(Bytes.toBytes("cf"), Bytes.toBytes("name")));
+			log.info("scan filter name is :{}", scanFilterName);
+		}
+
+	}
+
+	/**
+	 * 单列值过滤器
+	 * <p>
+	 * <b>缺点</b>
+	 * 单列值过滤器在发现该行记录没有我们想要比较的列时，会把整行记录放入结果集。如果想要安全地使用单列值过滤器，请务必保证每行记录都包含要比较的列
+	 * <p>
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void singleColumnValueFilter() throws Exception {
+		SingleColumnValueFilter singleColumnValueFilter = new SingleColumnValueFilter(Bytes.toBytes("cf"), Bytes.toBytes("name"), CompareFilter.CompareOp.EQUAL, new SubstringComparator("tomAndJack"));
+		Scan scan = new Scan();
+		scan.setFilter(singleColumnValueFilter);
+		ResultScanner re = table.getScanner(scan);
+		for (Result rs : re) {
+			String scanFilterName = Bytes.toString(rs.getValue(Bytes.toBytes("cf"), Bytes.toBytes("name")));
+			log.info("scan filter name is :{}", scanFilterName);
+		}
+
+	}
+
+	@Test
+	public void filterList() throws Exception {
+		// 创建过滤器列表
+		FilterList filterList = new FilterList(Operator.MUST_PASS_ALL);
+
+		// 只有列族为 cf的记录才放入结果集
+		FamilyFilter familyFilter = new FamilyFilter(CompareFilter.CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes("cf")));
+
+		filterList.addFilter(familyFilter);
+
+		// 只有列为name的记录才放入结果集
+		QualifierFilter colfFilter = new QualifierFilter(CompareFilter.CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes("name")));
+		filterList.addFilter(colfFilter);
+
+		// 只要值为tomAndJack才放入过滤器
+		ValueFilter valueFilter = new ValueFilter(CompareFilter.CompareOp.EQUAL, new SubstringComparator("tomAndJack"));
+		filterList.addFilter(valueFilter);
+
+		Scan scan = new Scan();
+		scan.setFilter(filterList);
+		ResultScanner re = table.getScanner(scan);
+		for (Result rs : re) {
+			String scanFilterName = Bytes.toString(rs.getValue(Bytes.toBytes("cf"), Bytes.toBytes("name")));
+			log.info("scan filter name is :{}", scanFilterName);
+		}
+	}
+
+	/**
+	 * 相当于SQL中“=”
+	 * 
+	 * @throws Exception
+	 */
 @Test
-public void valueFilter() throws IOException {
-	ValueFilter valueFilter = new ValueFilter(CompareFilter.CompareOp.EQUAL, new SubstringComparator("tomAndJack"));
+public void binaryComparator() throws Exception {
+	Filter filter = new SingleColumnValueFilter(Bytes.toBytes("cf"), Bytes.toBytes("name"), CompareFilter.CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes("tomAndJack88")));
 	Scan scan = new Scan();
-	scan.setFilter(valueFilter);
+	scan.setFilter(filter);
 	ResultScanner re = table.getScanner(scan);
 	for (Result rs : re) {
 		String scanFilterName = Bytes.toString(rs.getValue(Bytes.toBytes("cf"), Bytes.toBytes("name")));
 		log.info("scan filter name is :{}", scanFilterName);
 	}
-
 }
 }
