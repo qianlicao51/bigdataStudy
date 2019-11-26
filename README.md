@@ -67,7 +67,10 @@ mvn打包资源文件|https://www.jianshu.com/p/d44f713b1ec9
 [logback最佳实践](https://www.jianshu.com/p/b3dedb8fb61e)
 
 [log4j-over-slf4j工作原理详解](https://blog.csdn.net/john1337/article/details/76152906)
+
 [log无法输出到文件](https://blog.csdn.net/gwlsky/article/details/72821396)
+
+[将log4j、common-logging转换为logback](https://blog.csdn.net/zhangmm122411/article/details/77741311) | 解决方法是在工程中引入jcl-over-slf4j-1.6.1.jar，这样就将commons-logging与slf4j对接，再通过logback进行了日志的统一输出 
 
 
 
@@ -82,4 +85,10 @@ mvn打包资源文件|https://www.jianshu.com/p/d44f713b1ec9
     <version>2.2.1.RELEASE</version>
 </dependency>
 ```
+
+### 3 出错
+
+#### 3.1 java.io.IOException: Could not locate executable null\bin\winutils.exe in the Hadoop binaries
+
+[解决](https://www.cnblogs.com/hyl8218/p/5492450.html)
 

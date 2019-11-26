@@ -16,8 +16,8 @@ public class App2 {
 		while (true) {
 
 			Thread.sleep(1000L);
-			//TODO 格式化中间插入字母
-			log.info("主程序执行 |{}", new DateTime().toString("yyyy-MM-dd'ABC'HH:mm:ss:SSS"));
+			// TODO 格式化中间插入字母
+			log.info("主程序执行 |{}", new DateTime().toString("yyyy-MM-dd'T'HH:mm:ss:SSS"));
 			// TODO ClassLoader.getSystemResource 开始的位置是不带"/"
 			URI uri = ClassLoader.getSystemResource("hbase/hbase-site.xml").toURI();
 			logger.error(uri.toString());

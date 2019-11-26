@@ -180,11 +180,11 @@ public class HelloHbase {
 
 	public static void main(String[] args) {
 		log.info(StringUtils.center("main", 20, "-"));
-		// tableExists("javatb");
-		compressCloum("javatab", "cf");
+		tableExists("javatb");
+		// compressCloum("javatab", "cf");
 		// tableDelete("javatab");
 
-//		 createOrOverwrite("javatab", "cf");
+		// createOrOverwrite("javatab", "cf");
 		try {
 			admin.close();
 			connection.close();

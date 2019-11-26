@@ -40,17 +40,21 @@
 
   <property>
     <name>hbase.regionserver.ipc.address</name>
-    <value>0.0.0.0</value>
+    <value>quickstart.cloudera</value>
   </property>
 
   <property>
     <name>hbase.master.ipc.address</name>
-    <value>0.0.0.0</value>
+    <value>quickstart.cloudera</value>
   </property>
 
   <property>
     <name>hbase.thrift.info.bindAddress</name>
-    <value>0.0.0.0</value>
+    <value>quickstart.cloudera</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.quorum</name>
+    <value>quickstart.cloudera</value>
   </property>
 
 </configuration>
