@@ -1,4 +1,4 @@
-package com.bigdata.hbase.booka.filter;
+package com.bigdata.hbase.booka.filter.row;
 
 import java.io.IOException;
 
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * @ClassName FilterDemo
- * @Description hbase过滤器
+ * @Description hbase过滤器|行过滤器
  * @Author 51
  * @Date 2019年11月26日 下午4:44:10
  */
@@ -72,6 +72,7 @@ public class FilterDemo {
 			String scanFilterName = Bytes.toString(rs.getValue(Bytes.toBytes("cf"), Bytes.toBytes("name")));
 			log.info("scan filter name is :{}", scanFilterName);
 		}
+		re.close();
 
 	}
 
@@ -129,15 +130,15 @@ public class FilterDemo {
 	 * 
 	 * @throws Exception
 	 */
-@Test
-public void binaryComparator() throws Exception {
-	Filter filter = new SingleColumnValueFilter(Bytes.toBytes("cf"), Bytes.toBytes("name"), CompareFilter.CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes("tomAndJack88")));
-	Scan scan = new Scan();
-	scan.setFilter(filter);
-	ResultScanner re = table.getScanner(scan);
-	for (Result rs : re) {
-		String scanFilterName = Bytes.toString(rs.getValue(Bytes.toBytes("cf"), Bytes.toBytes("name")));
-		log.info("scan filter name is :{}", scanFilterName);
+	@Test
+	public void binaryComparator() throws Exception {
+		Filter filter = new SingleColumnValueFilter(Bytes.toBytes("cf"), Bytes.toBytes("name"), CompareFilter.CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes("tomAndJack88")));
+		Scan scan = new Scan();
+		scan.setFilter(filter);
+		ResultScanner re = table.getScanner(scan);
+		for (Result rs : re) {
+			String scanFilterName = Bytes.toString(rs.getValue(Bytes.toBytes("cf"), Bytes.toBytes("name")));
+			log.info("scan filter name is :{}", scanFilterName);
+		}
 	}
-}
 }
