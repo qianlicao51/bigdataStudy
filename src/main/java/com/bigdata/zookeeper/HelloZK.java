@@ -47,7 +47,7 @@ public class HelloZK {
 		Thread.sleep(Integer.MAX_VALUE);
 		int version = 1;
 		Stat stat;
-		BackgroundCallback
+		
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class HelloZK {
 
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
 //		创建一个客户端实例后，并没有 完成会话的创建，需要调用start 来完成会话创建
-		CuratorFramework client = CuratorFrameworkFactory.newClient("quickstart.cloudera:2181", 5000, 3000, retryPolicy)
+		CuratorFramework client = CuratorFrameworkFactory.newClient("quickstart.cloudera:2181", 5000, 3000, retryPolicy);
 		client.start();// 创建会话
 		Thread.sleep(Integer.MAX_VALUE);
 	}
