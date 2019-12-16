@@ -53,7 +53,6 @@ public class HelloHbase {
 	public static void createTable() {
 		conf = HBaseConfiguration.create();
 		conf.set("hbase.zookeeper.quorum", "quickstart.cloudera");// 单机
-
 		conf.set("hbase.zookeeper.property.clientPort", "2181");// zookeeper端口
 
 		// TODO 实际操作中下面这个没设置，hbase是如何找到hadoop的？
@@ -168,7 +167,6 @@ public class HelloHbase {
 			}
 			mycf.setCompressionType(Algorithm.SNAPPY);
 			// 把列族 的定义更新到表定义里面去||只有调用了Admin类来进行操作的时候hbase的修改才开始真正执行
-
 			table.modifyFamily(mycf);
 
 			admin.modifyTable(tableName, table);
