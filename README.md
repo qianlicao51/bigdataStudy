@@ -51,6 +51,12 @@ mvn打包资源文件|https://www.jianshu.com/p/d44f713b1ec9
 
 ```
 
+# zookeeper开源客户端Curator介绍
+
+https://blog.csdn.net/qq_34021712/article/details/82872311
+
+[Curator-Framework开源Zookeeper快速开发框架介绍](https://www.cnblogs.com/xguo/archive/2013/06/15/3137280.html)
+
 
 
 ### 日志
