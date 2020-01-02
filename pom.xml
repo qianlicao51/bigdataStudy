@@ -1,251 +1,259 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.bigdata</groupId>
+    <artifactId>bigdataHbase</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <properties>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.bigdata</groupId>
-	<artifactId>bigdataHbase</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<properties>
+        <java.version>1.8</java.version>
+        <!-- 文件拷贝时的编码 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- 编译时的编码 -->
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <commons-io>2.6</commons-io>
+        <scala.version>2.12.10</scala.version>
+        <spark.version>2.4.0</spark.version>
+        <joda-time.version>2.9.9</joda-time.version>
+        <commons-lang3.version>3.5</commons-lang3.version>
+        <hbase.version>1.2.0</hbase.version>
+        <logback.version>1.2.3</logback.version>
+        <curator-version>4.0.1</curator-version>
+    </properties>
 
-		<java.version>1.8</java.version>
-		<!-- 文件拷贝时的编码 -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<!-- 编译时的编码 -->
-		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-		<commons-io>2.6</commons-io>
-	<scala.version>2.12.10</scala.version>
-		<spark.version>2.4.0</spark.version>
-		<joda-time.version>2.9.9</joda-time.version>
-		<commons-lang3.version>3.5</commons-lang3.version>
-		<hbase.version>1.2.0</hbase.version>
-		<logback.version>1.2.3</logback.version>
-		<curator-version>4.0.1</curator-version>
-	</properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+        </dependency>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.16.10</version>
-		</dependency>
+        <!-- 日志 -->
+        <!-- logback -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+            <version>2.1.5.RELEASE</version>
+        </dependency>
 
-		<!-- 日志 -->
-		<!-- logback -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-logging</artifactId>
-			<version>2.1.5.RELEASE</version>
-		</dependency>
-
-		<dependency><!-- commons-logging与slf4j对接，再通过logback进行了日志的统一输出 -->
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.7.25</version>
-		</dependency>
-
-
-		<!-- <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-classic</artifactId> <version>${logback.version}</version> </dependency> <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-access</artifactId> <version>${logback.version}</version> </dependency> -->
-		<!-- 时间 -->
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>${joda-time.version}</version>
-		</dependency>
-
-		<!-- common |start -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-		</dependency>
-
-		<!-- common |end/ -->
-
-		<!-- hbase jar |start -->
-		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-client</artifactId>
-			<version>${hbase.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId> <!-- 使用logbak，排查此日志 -->
-				</exclusion>
-				<!-- <exclusion> <groupId>log4j</groupId> <artifactId>log4j</artifactId> </exclusion> -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- <dependency> <groupId>org.apache.hbase</groupId> <artifactId>hbase-server</artifactId> <version>${hbase.version}</version> </dependency> -->
-
-		<!-- <dependency> <groupId>com.aliyun.hbase</groupId> <artifactId>alihbase-server</artifactId> <version>2.0.2</version> </dependency> -->
-
-		<!-- hbase jar /end -->
-		<!-- zookeeper 开源客户端 -->
-		<dependency>
-			<groupId>org.apache.curator</groupId>
-			<artifactId>curator-recipes</artifactId>
-			<version>${curator-version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.zookeeper</groupId>
-					<artifactId>zookeeper</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.curator/curator-framework -->
-		<!-- https://mvnrepository.com/artifact/org.scala-lang/scala-reflect -->
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-reflect</artifactId>
-			<version>${scala.version}</version>
-		</dependency>
-		<!-- redis -->
-		<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<version>3.1.0</version>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<!-- java 下面的 xml等文件 打入 jar -->
-					<include>**/*.xml</include>
-				</includes>
-			</resource>
-
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.properties</include>
-					<include>**/*.**</include>
-				</includes>
-			</resource>
-			<resource>
-				<!-- 不可分离的jar打入 包中|springboot | -->
-				<directory>${project.basedir}/libs</directory>
-				<targetPath>BOOT-INF/lib/</targetPath>
-				<includes>
-					<include>**/*.jar</include>
-				</includes>
-			</resource>
-		</resources>
-		<plugins>
-			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 1 |打包jar配置~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-			<!--打包jar -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
-				<configuration>
-					<!--不打包资源文件 到jar 中 -->
-					<!-- 过滤掉不希望包含在jar中的文件 -->
-					<excludes>
-						<exclude>*.*</exclude><!-- resource目录下(不包含子文件夹下的内容) 不会被拷贝到jar -->
-						<!-- <exclude>*.properties</exclude> -->
-						<exclude>hbas*/**</exclude><!-- resource 目录中的 hbase 文件夹等不会拷贝到jar -->
-						<exclude>logback/**</exclude>
-					</excludes>
-					<archive><!-- 清单文件 -->
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<!-- 指定入口 -->
-							<mainClass>com.bigdata.App2</mainClass>
-							<!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
-							<useUniqueVersions>true</useUniqueVersions>
-						</manifest>
-						<manifestEntries><!-- 给清单文件添加键值对(配置文件外置) -->
-							<Class-Path>config/</Class-Path>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 2 |拷贝依赖 copy-dependencies~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-			<!-- TODO 打包命令 -->
-			<!-- mvn clean scala:compile compile package -->
-			<!-- mvn clean scala:compile dependency:copy-dependencies -DoutputDirectory=target/lib compile package -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/lib</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-							<includeScope>compile</includeScope><!-- 拷贝是排除test 的依赖 这部分可以参考https://liugang594.iteye.com/blog/2093082 -->
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 3|拷贝资源文件 copy-resources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <dependency><!-- commons-logging与slf4j对接，再通过logback进行了日志的统一输出 -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.25</version>
+        </dependency>
 
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.1.0</version>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
-									<directory>src/main/resources</directory>
-									<!-- 资源文件中存在变量引用 ,用 下面属性替换变量 -->
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-							<outputDirectory>${project.build.directory}/config</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+        <!-- <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-classic</artifactId> <version>${logback.version}</version> </dependency> <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-access</artifactId> <version>${logback.version}</version> </dependency> -->
+        <!-- 时间 -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda-time.version}</version>
+        </dependency>
 
-			<!-- scala 打包配置 |难道有 scala-jar可以不需要这个？ -->
-			<plugin>
-				<groupId>net.alchim31.maven</groupId>
-				<artifactId>scala-maven-plugin</artifactId>
-				<version>3.2.2</version>
-			</plugin>
+        <!-- common |start -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
 
-			<!-- SpringBoot可以使用下面这个 -->
+        <!-- common |end/ -->
 
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<layout>ZIP</layout>
-					<includes>
-						<include>
-							<groupId>cn.jstars</groupId>
-							<artifactId>datatocloud</artifactId>
-						</include>
-					</includes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+        <!-- hbase jar |start -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${hbase.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId> <!-- 使用logbak，排查此日志 -->
+                </exclusion>
+                <!-- <exclusion> <groupId>log4j</groupId> <artifactId>log4j</artifactId> </exclusion> -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- <dependency> <groupId>org.apache.hbase</groupId> <artifactId>hbase-server</artifactId> <version>${hbase.version}</version> </dependency> -->
+
+        <!-- <dependency> <groupId>com.aliyun.hbase</groupId> <artifactId>alihbase-server</artifactId> <version>2.0.2</version> </dependency> -->
+
+        <!-- hbase jar /end -->
+        <!-- zookeeper 开源客户端 -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>${curator-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.curator/curator-framework -->
+        <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-reflect -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.scala-lang.modules/scala-swing -->
+        <dependency>
+            <groupId>org.scala-lang.modules</groupId>
+            <artifactId>scala-swing_2.12</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <!-- redis -->
+        <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <!-- java 下面的 xml等文件 打入 jar -->
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.**</include>
+                </includes>
+            </resource>
+            <resource>
+                <!-- 不可分离的jar打入 包中|springboot | -->
+                <directory>${project.basedir}/libs</directory>
+                <targetPath>BOOT-INF/lib/</targetPath>
+                <includes>
+                    <include>**/*.jar</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 1 |打包jar配置~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+            <!--打包jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <!--不打包资源文件 到jar 中 -->
+                    <!-- 过滤掉不希望包含在jar中的文件 -->
+                    <excludes>
+                        <exclude>*.*</exclude><!-- resource目录下(不包含子文件夹下的内容) 不会被拷贝到jar -->
+                        <!-- <exclude>*.properties</exclude> -->
+                        <exclude>hbas*/**</exclude><!-- resource 目录中的 hbase 文件夹等不会拷贝到jar -->
+                        <exclude>logback/**</exclude>
+                    </excludes>
+                    <archive><!-- 清单文件 -->
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!-- 指定入口 -->
+                            <mainClass>com.bigdata.App2</mainClass>
+                            <!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
+                            <useUniqueVersions>true</useUniqueVersions>
+                        </manifest>
+                        <manifestEntries><!-- 给清单文件添加键值对(配置文件外置) -->
+                            <Class-Path>config/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 2 |拷贝依赖 copy-dependencies~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+            <!-- TODO 打包命令 -->
+            <!-- mvn clean scala:compile compile package -->
+            <!-- mvn clean scala:compile dependency:copy-dependencies -DoutputDirectory=target/lib compile package -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>compile
+                            </includeScope><!-- 拷贝是排除test 的依赖 这部分可以参考https://liugang594.iteye.com/blog/2093082 -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ step 3|拷贝资源文件 copy-resources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <!-- 资源文件中存在变量引用 ,用 下面属性替换变量 -->
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <outputDirectory>${project.build.directory}/config</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- scala 打包配置 |难道有 scala-jar可以不需要这个？ -->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>3.2.2</version>
+            </plugin>
+
+            <!-- SpringBoot可以使用下面这个 -->
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layout>ZIP</layout>
+                    <includes>
+                        <include>
+                            <groupId>cn.jstars</groupId>
+                            <artifactId>datatocloud</artifactId>
+                        </include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
