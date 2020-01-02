@@ -11,7 +11,7 @@ object FallWinterSpringSummer extends App {
   println("结果：", new Rational(66, 42))
   private val rational2 = new Rational(66, 42)
 
-
+//push
 }
 
 
