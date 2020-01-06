@@ -1,10 +1,7 @@
-package com.study.scala.booka.char04
+package com.study.scala.booka.char05
 
-object CaseClass {
+object Demo02 {
   def main(args: Array[String]): Unit = {
-
     println("scala")
-
   }
 }
-
