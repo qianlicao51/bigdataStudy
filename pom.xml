@@ -16,7 +16,7 @@
         <scala.version>2.12.10</scala.version>
         <spark.version>2.4.0</spark.version>
         <joda-time.version>2.9.9</joda-time.version>
-        <commons-lang3.version>3.5</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <hbase.version>1.2.0</hbase.version>
         <logback.version>1.2.3</logback.version>
         <curator-version>4.0.1</curator-version>
